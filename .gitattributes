@@ -1,0 +1,2 @@
+monoko_data/rag_index/*.bin filter=lfs diff=lfs merge=lfs -text
+monoko_data/rag_index/*.pkl filter=lfs diff=lfs merge=lfs -text
