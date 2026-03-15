@@ -74,7 +74,12 @@ def ensure_indexes() -> None:
             filename = os.path.basename(local_path)
             print(f"  ⬇️  Downloading {filename} from Supabase Storage...")
             try:
-                urllib.request.urlretrieve(url, local_path)
+                req = urllib.request.Request(
+                    url,
+                    headers={"User-Agent": "Mozilla/5.0 (compatible; MonokoRAG/1.0)"}
+                )
+                with urllib.request.urlopen(req) as response, open(local_path, "wb") as f:
+                    f.write(response.read())
                 size_mb = os.path.getsize(local_path) / 1_048_576
                 print(f"  ✅  {filename}  ({size_mb:.1f} MB)")
             except Exception as e:
@@ -123,6 +128,7 @@ def load_rag():
 class ContextRequest(BaseModel):
     query: str
     top_k: int = 20
+    language_id: int | None = None  # accepted but not yet used for filtering
 
 
 class ContextResponse(BaseModel):
