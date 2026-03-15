@@ -78,24 +78,8 @@ def load_knowledge_base() -> List[Dict]:
                 docs.append(doc)
     print(f"  verified + gold : {len(docs):,} entries")
 
-    # Tier 3: high-confidence NLLB
-    nllb_count = 0
-    if os.path.exists(NLLB_HC_FILE):
-        with open(NLLB_HC_FILE, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                try:
-                    doc = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
-                if doc.get("ngram_score", -99) > NLLB_NGRAM_THRESHOLD:
-                    docs.append(doc)
-                    nllb_count += 1
-        print(f"  NLLB HC         : {nllb_count:,} entries  (ngram_score > {NLLB_NGRAM_THRESHOLD})")
-    else:
-        print(f"  NLLB HC file not found — skipping ({NLLB_HC_FILE})")
+    # NLLB tier removed — eval showed it degrades translation quality
+    # (verified + gold corpus is sufficient and cleaner)
 
     print(f"✅ Total knowledge base: {len(docs):,} entries")
     return docs
